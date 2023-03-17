@@ -319,7 +319,7 @@ double AvtVimbaCamera::getTimestamp()
 double AvtVimbaCamera::getDeviceTemp()
 {
   double temp = -1.0;
-  if (setFeatureValue("DeviceTemperatureSelector", "Main") == VmbErrorSuccess)
+  if (setFeatureValue("DeviceTemperatureSelector", "Mainboard") == VmbErrorSuccess)
   {
     getFeatureValue("DeviceTemperature", temp);
   }
@@ -815,6 +815,7 @@ void AvtVimbaCamera::updateConfig(Config& config)
   updatePixelFormatConfig(config);
   updateAcquisitionConfig(config);
   updateIrisConfig(config);
+  updateIntensityConfig(config);
   config_ = config;
 
   if (on_init_)
@@ -824,6 +825,7 @@ void AvtVimbaCamera::updateConfig(Config& config)
 
   startImaging();
 }
+
 
 /** Change the Trigger configuration */
 void AvtVimbaCamera::updateAcquisitionConfig(Config& config)
@@ -839,7 +841,7 @@ void AvtVimbaCamera::updateAcquisitionConfig(Config& config)
   }
   if (config.acquisition_rate != config_.acquisition_rate || on_init_)
   {
-    configureFeature("AcquisitionFrameRateAbs", static_cast<float>(config.acquisition_rate), config.acquisition_rate);
+    configureFeature("AcquisitionFrameRate", static_cast<float>(config.acquisition_rate), config.acquisition_rate);
   }
   if (config.trigger_mode != config_.trigger_mode || on_init_)
   {
@@ -859,7 +861,7 @@ void AvtVimbaCamera::updateAcquisitionConfig(Config& config)
   }
   if (config.trigger_delay != config_.trigger_delay || on_init_)
   {
-    configureFeature("TriggerDelayAbs", static_cast<float>(config.trigger_delay), config.trigger_delay);
+    configureFeature("TriggerDelay", static_cast<float>(config.trigger_delay), config.trigger_delay);
   }
   if (config.action_device_key != config_.action_device_key || on_init_)
   {
@@ -872,6 +874,25 @@ void AvtVimbaCamera::updateAcquisitionConfig(Config& config)
   if (config.action_group_mask != config_.action_group_mask || on_init_)
   {
     configureFeature("ActionGroupMask", static_cast<VmbInt64_t>(config.action_group_mask), config.action_group_mask);
+  }
+}
+
+/* Change the Intensity config */
+void AvtVimbaCamera::updateIntensityConfig(Config& config)
+{
+  if(on_init_)
+  {
+    ROS_INFO("Updating Intesity config:");
+  }
+
+  if (config.intensity_target != config_.intensity_target || on_init_)
+  {
+    configureFeature("IntensityControllerTarget", static_cast<float>(config.intensity_target),
+                     config.intensity_target);
+  }
+  if (config.intensity_precedence != config_.intensity_precedence || on_init_)
+  {
+    configureFeature("IntensityAutoPrecedence", config.intensity_precedence, config.intensity_precedence);
   }
 }
 
@@ -913,7 +934,7 @@ void AvtVimbaCamera::updateExposureConfig(Config& config)
 
   if (config.exposure != config_.exposure || on_init_)
   {
-    configureFeature("ExposureTimeAbs", static_cast<float>(config.exposure), config.exposure);
+    configureFeature("ExposureTime", static_cast<float>(config.exposure), config.exposure);
   }
   if (config.exposure_auto != config_.exposure_auto || on_init_)
   {
@@ -1061,7 +1082,7 @@ void AvtVimbaCamera::updateWhiteBalanceConfig(Config& config)
 
   if (config.balance_ratio_abs != config_.balance_ratio_abs || on_init_)
   {
-    configureFeature("BalanceRatioAbs", static_cast<float>(config.balance_ratio_abs), config.balance_ratio_abs);
+    configureFeature("BalanceRatio", static_cast<float>(config.balance_ratio_abs), config.balance_ratio_abs);
   }
   if (config.balance_ratio_selector != config_.balance_ratio_selector || on_init_)
   {

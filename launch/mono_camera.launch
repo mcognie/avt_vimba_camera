@@ -2,7 +2,7 @@
   <!-- Driver parameters, these parameters affect the way the ROS driver works -->
   <arg name="name" default="camera" doc="The name of the camera"/>
   <arg name="ip" default="" doc="The IP for the camera to connect to"/>
-  <arg name="guid" default="" doc="The GUID for the camera to connect to"/>
+  <arg name="guid" default="DEV_1AB22C014A1D" doc="The GUID for the camera to connect to"/>
   <arg name="frame_id" default="$(arg name)" doc="The frame id of the camera"/>
   <arg name="use_measurement_time" default="false" doc="Use the measurement time from the camera"/>
   <arg name="ptp_offset" default="-37" doc="Offset to add to the timestamp from the camera (s).
@@ -18,8 +18,8 @@
   <arg name="acquisition_mode" default="Continuous"/>
   <arg name="acquisition_rate" default="10"/>
   <!-- Trigger -->
-  <arg name="trigger_source" default="FixedRate"/>
-  <arg name="trigger_mode" default="On"/>
+  <arg name="trigger_source" default="Software"/>
+  <arg name="trigger_mode" default="Off"/>
   <arg name="trigger_selector" default="FrameStart"/>
   <arg name="trigger_activation" default="RisingEdge"/>
   <arg name="trigger_delay" default="0.0"/>
@@ -37,7 +37,7 @@
   <arg name="gain" default="0"/>
   <arg name="gain_auto" default="Continuous"/>
   <arg name="gain_auto_adjust_tol" default="5"/>
-  <arg name="gain_auto_max" default="32"/>
+  <arg name="gain_auto_max" default="27"/>
   <arg name="gain_auto_min" default="0"/>
   <arg name="gain_auto_outliers" default="0"/>
   <arg name="gain_auto_rate" default="50"/>
@@ -77,6 +77,9 @@
   <arg name="iris_mode" default="Continuous"/>
   <arg name="iris_video_level_min" default="110"/>
   <arg name="iris_video_level_max" default="110"/>
+  <!-- Intensity -->
+  <arg name="intensity_target" default="80"/>
+  <arg name="intensity_precedence" default="Minimizeblur"/>
 
   <group if="$(arg image_proc)" ns="$(arg name)">
     <node name="image_proc" pkg="image_proc" type="image_proc"/>
@@ -153,5 +156,8 @@
     <param name="iris_mode" value="$(arg iris_mode)"/>
     <param name="iris_video_level_min" value="$(arg iris_video_level_min)"/>
     <param name="iris_video_level_max" value="$(arg iris_video_level_max)"/>
+
+    <param name="intensity_target" value="$(arg intensity_target)"/>
+    <param name="intensity_precedence" value="$(arg intensity_precedence)"/>
   </node>
 </launch>

@@ -155,6 +155,7 @@ private:
   void updateGPIOConfig(Config& config);
   void updateUSBGPIOConfig(Config& config);
   void updateIrisConfig(Config& config);
+  void updateIntensityConfig(Config& config);
 
   void getCurrentState(diagnostic_updater::DiagnosticStatusWrapper& stat);
 };
